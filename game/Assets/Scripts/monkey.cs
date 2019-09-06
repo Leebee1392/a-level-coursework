@@ -1,50 +1,111 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
 
 public class monkey : MonoBehaviour
 {
-    private Rigidbody2D playerRigidbody;
-    // for floats add a f on the end of a number
-    public float moveSpeed = 1f;
+    private Vector2Int position;
+    private Vector2Int direction;
+    private float timeSinceLastMoved;
+    private readonly float frequencyOfMovement = 1f;
 
-    public void Awake()
+    private void Awake()
     {
-        playerRigidbody = GetComponent<Rigidbody2D>();
+        position = new Vector2Int(10,10);
+        timeSinceLastMoved = frequencyOfMovement;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Update()
     {
-        
-    }
+        HandleInput();
 
-    // Fixed Update can be run once, zero or serveral times a frame
-    // depending on how many physics frames per seconds are set in the time settings
-    // and how fast or slow the frame rate is 
-    private void FixedUpdate()
-    {
-        if (playerRigidbody != null)
+        timeSinceLastMoved = timeSinceLastMoved + Time.deltaTime;
+        if (timeSinceLastMoved >= frequencyOfMovement)
         {
-            ApplyInput();
+            position = position + direction;
+            timeSinceLastMoved = timeSinceLastMoved - frequencyOfMovement;
         }
-        else
-        {
-            Debug.LogWarning("Rigidbody is not attached to player " + gameObject.name);
-        }
+
+        transform.position = new Vector3(position.x, position.y);
     }
 
-    public void ApplyInput()
+    private void HandleInput()
     {
-        float xInput = Input.GetAxis("Horizontal");
-        float yInput = Input.GetAxis("Vertical");
-
-        float xforce = xInput * moveSpeed * Time.deltaTime;
-
-        Vector2 force = new Vector2(xforce, 0);
-
-        playerRigidbody.AddForce(force);
+        if (HasUserPressedUp())
+        {
+            SetDirectionUp();
+        }
+        else if (HasUserPressedDown())
+        {
+            SetDirectionDown();
+        }
+        else if (HasUserPressedLeft())
+        {
+            SetDirectionLeft();
+        }
+        else if (HasUserPressedRight())
+        {
+            SetDirectionRight();
+        }
     }
+
+    private bool HasUserPressedUp()
+    {
+        return Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W);
+    }
+
+    private bool HasUserPressedDown()
+    {
+        return Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S);
+    }
+
+    private bool HasUserPressedLeft()
+    {
+        return Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A);
+    }
+
+    private bool HasUserPressedRight()
+    {
+        return Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D);
+    }
+
+    private void SetDirectionUp()
+    {
+        // you can only go up if you are not currently going down
+        if (direction.y != -1)
+        {
+            direction.x = 0;
+            direction.y = 1;
+        }
+    }
+
+    private void SetDirectionDown()
+    {
+        // you can only go down if you are not currently going up
+        if (direction.y != 1)
+        {
+            direction.x = 0;
+            direction.y = -1;
+        }
+    }
+
+    private void SetDirectionLeft()
+    {
+        // you can only go left if you are not currently going right
+        if (direction.x != 1)
+        {
+            direction.x = -1;
+            direction.y = 0;
+        }
+    }
+
+    private void SetDirectionRight()
+    {
+        // you can only go right if you are not currently going left
+        if (direction.x != -1)
+        {
+            direction.x = 1;
+            direction.y = 0;
+        }
+    }
+
 }
