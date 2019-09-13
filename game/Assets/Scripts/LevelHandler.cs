@@ -1,18 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LevelHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Monkey monkey;
+    private GridManager gridManager;
 
-    // Update is called once per frame
-    void Update()
+    public Sprite food;
+
+    private void Start()
     {
-        
+        Debug.Log("Start");
+        gridManager = new GridManager(20, 20, food);
+
+        // this is giving the gridmanager the monkey object and the monkey the gridmanager object
+        monkey.Setup(gridManager);
+        gridManager.SetUp(monkey);
     }
 }

@@ -1,20 +1,25 @@
 ﻿using UnityEngine;
 
-
-public class monkey : MonoBehaviour
+public class Monkey : MonoBehaviour
 {
     private Vector2Int position;
-    private Vector2Int direction;
-    private float timeSinceLastMoved;
-    private readonly float frequencyOfMovement = 1f;
+    public Vector2Int direction;
+    public float timeSinceLastMoved;
+    public readonly float frequencyOfMovement = 1f;
+    public GridManager gridManager;
+
+    public void Setup(GridManager gridManager)
+    {
+        this.gridManager = gridManager;
+    }
 
     private void Awake()
     {
-        position = new Vector2Int(10,10);
+        position = new Vector2Int(10, 10);
         timeSinceLastMoved = frequencyOfMovement;
     }
 
-    private void Update()
+    public void Update()
     {
         HandleInput();
 
@@ -26,6 +31,10 @@ public class monkey : MonoBehaviour
         }
 
         transform.position = new Vector3(position.x, position.y);
+        transform.eulerAngles = new Vector3(0, 0, GetAngleVector(direction) - 90);
+
+       gridManager.SnakeMoved(position);
+        
     }
 
     private void HandleInput()
@@ -108,4 +117,14 @@ public class monkey : MonoBehaviour
         }
     }
 
+    private float GetAngleVector(Vector2Int dir)
+    {
+        float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        if (n > 0)
+        {
+            n = n + 360;
+        }
+        return n;
+    }
 }
+

@@ -226,6 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d094c6eb8fcd5b84b96fd9041389e949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0}
+  timeSinceLastMoved: 0
 --- !u!1 &658487585
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a17c86fa5f20d479b9e8064affbd3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monkey: {fileID: 4111310}
 --- !u!4 &658487587
 Transform:
   m_ObjectHideFlags: 0
