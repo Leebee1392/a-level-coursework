@@ -258,6 +258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monkey: {fileID: 4111310}
+  food: {fileID: 21300000, guid: 4b837ed97e17d274a802957220423076, type: 3}
+  body: {fileID: 21300000, guid: 18e8782b701ca1941afb631eb2b1d43d, type: 3}
 --- !u!4 &658487587
 Transform:
   m_ObjectHideFlags: 0

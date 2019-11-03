@@ -25,20 +25,29 @@ public class GridManager
 
     private void SpawnFood()
     {
-        foodGridPosition = new Vector2Int(Random.Range(0, width), Random.Range(0, height));
+        // makes sure the food doesn't land on the snake
+        do
+        {
+            foodGridPosition = new Vector2Int(Random.Range(0, width), Random.Range(0, height));
+        } while (monkey.GetSnakeLocations().IndexOf(foodGridPosition) != -1);
 
         foodGameObject = new GameObject("Food", typeof(SpriteRenderer));
         foodGameObject.GetComponent<SpriteRenderer>().sprite = foodSprite;
         foodGameObject.transform.position = new Vector3(foodGridPosition.x, foodGridPosition.y);
     }
 
-   public void SnakeMoved(Vector2Int snakePosition)
+   public bool SnakeMovedAndEaten(Vector2Int snakePosition)
     {
         if (snakePosition == foodGridPosition)
         {
             Object.Destroy(foodGameObject);
             SpawnFood();
             Debug.Log("Snake ate food");
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
