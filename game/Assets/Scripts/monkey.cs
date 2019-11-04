@@ -3,13 +3,21 @@ using UnityEngine;
 
 public class Monkey : MonoBehaviour
 {
+    
+    private enum Direction
+    {
+        Left,
+        Right,
+        Up,
+        Down,
+    }
     private Vector2Int currentLocation;
-    public Vector2Int direction;
+    private Direction direction;
     public float timeSinceLastMoved;
     public readonly float frequencyOfMovement = 1f;
     public GridManager gridManager;
     private int snakeBodySize;
-    private List<Vector2Int> previousLocations;
+    private List<SnakeMovePosition> previousLocations;
     private List<SnakeBodyPart> snakeBodyPartList;
     public Sprite body;
 
@@ -25,7 +33,8 @@ public class Monkey : MonoBehaviour
     {
         currentLocation = new Vector2Int(10, 10);
         timeSinceLastMoved = frequencyOfMovement;
-        previousLocations = new List<Vector2Int>();
+        previousLocations = new List<SnakeMovePosition>();
+        direction = Direction.Right;
         snakeBodySize = 0;
         snakeBodyPartList = new List<SnakeBodyPart>();
     }
@@ -37,11 +46,34 @@ public class Monkey : MonoBehaviour
         timeSinceLastMoved = timeSinceLastMoved + Time.deltaTime;
         if (timeSinceLastMoved >= frequencyOfMovement)
         {
+            SnakeMovePosition snakeMovePosition = new SnakeMovePosition(currentLocation, direction);
             // adds the position to the list
-            previousLocations.Insert(0, currentLocation);
+            previousLocations.Insert(0, snakeMovePosition);
 
-            currentLocation = currentLocation + direction;
             timeSinceLastMoved = timeSinceLastMoved - frequencyOfMovement;
+
+            Vector2Int directionVector;
+            switch (direction)
+            {
+                default:
+                case Direction.Right:
+                    directionVector = new Vector2Int(1, 0);
+                    break;
+
+                case Direction.Left:
+                    directionVector = new Vector2Int(-1, 0);
+                    break;
+
+                case Direction.Up:
+                    directionVector = new Vector2Int(0, 1);
+                    break;
+
+                case Direction.Down:
+                    directionVector = new Vector2Int(0, -1);
+                    break;
+            }
+
+            currentLocation = currentLocation + directionVector;
 
             bool snakeAteFood = gridManager.SnakeMovedAndEaten(currentLocation);
             if (snakeAteFood)
@@ -60,7 +92,8 @@ public class Monkey : MonoBehaviour
             }
 
             transform.position = new Vector3(currentLocation.x, currentLocation.y);
-            transform.eulerAngles = new Vector3(0, 0, GetAngleVector(direction) - 90);
+            transform.eulerAngles = new Vector3(0, 0, GetAngleVector(directionVector) - 90);
+
 
             UpdateSnakeBodyParts();
 
@@ -77,7 +110,7 @@ public class Monkey : MonoBehaviour
         // working out where the snake is
         for (int i = 0; i < snakeBodyPartList.Count; i++)
         {
-            snakeBodyPartList[i].SetGridPosition(previousLocations[i]);
+            snakeBodyPartList[i].SetGridPosition(previousLocations[i].GetCurrentLocation());
         }
     }
 
@@ -124,40 +157,36 @@ public class Monkey : MonoBehaviour
     private void SetDirectionUp()
     {
         // you can only go up if you are not currently going down
-        if (direction.y != -1)
+        if (direction != Direction.Down)
         {
-            direction.x = 0;
-            direction.y = 1;
+            direction = Direction.Up;
         }
     }
 
     private void SetDirectionDown()
     {
         // you can only go down if you are not currently going up
-        if (direction.y != 1)
+        if (direction != Direction.Up)
         {
-            direction.x = 0;
-            direction.y = -1;
+            direction = Direction.Down;
         }
     }
 
     private void SetDirectionLeft()
     {
         // you can only go left if you are not currently going right
-        if (direction.x != 1)
+        if (direction != Direction.Right)
         {
-            direction.x = -1;
-            direction.y = 0;
+            direction = Direction.Left;
         }
     }
 
     private void SetDirectionRight()
     {
         // you can only go right if you are not currently going left
-        if (direction.x != -1)
+        if (direction != Direction.Left)
         {
-            direction.x = 1;
-            direction.y = 0;
+            direction = Direction.Right;
         }
     }
 
@@ -175,9 +204,9 @@ public class Monkey : MonoBehaviour
     {
         List<Vector2Int> locations = new List<Vector2Int>();
         locations.Add(currentLocation);
-        foreach(Vector2Int previousLocation in previousLocations)
+        foreach(SnakeMovePosition snakeMovePosition in previousLocations)
         {
-            locations.Add(previousLocation);
+            locations.Add(snakeMovePosition.GetCurrentLocation());
         }
 
         // Debug Logging
@@ -209,6 +238,25 @@ public class Monkey : MonoBehaviour
         {
             this.currentLocation = currentLocation;
             transform.position = new Vector3(currentLocation.x, currentLocation.y);
+        }
+    }
+
+   
+    private class SnakeMovePosition
+    {
+        private Vector2Int currentLocation;
+        private Direction direction;
+
+        //constructor
+        public SnakeMovePosition(Vector2Int currentLocation, Direction direction)
+        {
+            this.currentLocation = currentLocation;
+            this.direction = direction;
+        }
+
+        public Vector2Int GetCurrentLocation()
+        {
+            return currentLocation;
         }
     }
 }
