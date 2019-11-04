@@ -10,7 +10,7 @@ public class Monkey : MonoBehaviour
     public GridManager gridManager;
     private int snakeBodySize;
     private List<Vector2Int> previousLocations;
-    private List<Transform> snakeBodyTransformList;
+    private List<SnakeBodyPart> snakeBodyPartList;
     public Sprite body;
 
 
@@ -27,7 +27,7 @@ public class Monkey : MonoBehaviour
         timeSinceLastMoved = frequencyOfMovement;
         previousLocations = new List<Vector2Int>();
         snakeBodySize = 0;
-        snakeBodyTransformList = new List<Transform>();
+        snakeBodyPartList = new List<SnakeBodyPart>();
     }
 
     public void Update()
@@ -62,14 +62,23 @@ public class Monkey : MonoBehaviour
             transform.position = new Vector3(currentLocation.x, currentLocation.y);
             transform.eulerAngles = new Vector3(0, 0, GetAngleVector(direction) - 90);
 
+            UpdateSnakeBodyParts();
+
         }      
     }
 
     private void CreateSnakeBody()
     {
-        GameObject snakeBodyGameObject = new GameObject("body", typeof(SpriteRenderer));
-        snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite = body;
-        snakeBodyTransformList.Add(snakeBodyGameObject.transform);
+        snakeBodyPartList.Add(new SnakeBodyPart(snakeBodyPartList.Count, body));
+    }
+
+    private void UpdateSnakeBodyParts()
+    {
+        // working out where the snake is
+        for (int i = 0; i < snakeBodyPartList.Count; i++)
+        {
+            snakeBodyPartList[i].SetGridPosition(previousLocations[i]);
+        }
     }
 
     private void HandleInput()
@@ -180,6 +189,27 @@ public class Monkey : MonoBehaviour
         Debug.Log("Current Snake Locations :" + positions);
 
         return locations;
+    }
+
+
+    private class SnakeBodyPart
+    {
+        private Vector2Int currentLocation;
+        private Transform transform;
+
+        public SnakeBodyPart(int bodyIndex, Sprite body)
+        {
+            GameObject snakeBodyGameObject = new GameObject("body", typeof(SpriteRenderer));
+            snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite = body;
+            snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder = -bodyIndex;
+            transform = snakeBodyGameObject.transform;
+        }
+
+        public void SetGridPosition(Vector2Int currentLocation)
+        {
+            this.currentLocation = currentLocation;
+            transform.position = new Vector3(currentLocation.x, currentLocation.y);
+        }
     }
 }
 
