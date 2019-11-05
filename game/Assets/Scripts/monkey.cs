@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Monkey : MonoBehaviour
 {
-    
+    // enums - shortens code, easier to read
     private enum Direction
     {
         Left,
@@ -44,9 +44,19 @@ public class Monkey : MonoBehaviour
         HandleInput();
 
         timeSinceLastMoved = timeSinceLastMoved + Time.deltaTime;
+
         if (timeSinceLastMoved >= frequencyOfMovement)
         {
-            SnakeMovePosition snakeMovePosition = new SnakeMovePosition(currentLocation, direction);
+            SnakeMovePosition previousSnakeMovePosition = null;
+
+            // checks if we have at least one position in the list and make sure we don't
+            // pick the previous location
+            if (previousLocations.Count > 0)
+            {
+                previousSnakeMovePosition = previousLocations[0];
+            }
+
+            SnakeMovePosition snakeMovePosition = new SnakeMovePosition(previousSnakeMovePosition,currentLocation, direction);
             // adds the position to the list
             previousLocations.Insert(0, snakeMovePosition);
 
@@ -244,17 +254,76 @@ public class Monkey : MonoBehaviour
             switch (snakeMovePosition.GetDirection())
             {
                 default:
+                // currently going up
                 case Direction.Up:
-                    angle = 0;
+                    switch (snakeMovePosition.GetPreviousDirection())
+                    {
+                        default:
+                            angle = 0;
+                            break;
+                        // previously was going left
+                        case Direction.Left:
+                            angle = 0 + 45;
+                            break;
+                        // previously was going right
+                        case Direction.Right:
+                            angle = 0 - 45;
+                            break;
+                    }
                     break;
-                case Direction.Down:
-                    angle = 180;
+
+                        // currently going down
+                        case Direction.Down:
+                    switch (snakeMovePosition.GetPreviousDirection())
+                    {
+                        default:
+                            angle = 180;
+                            break;
+                        // previously was going left
+                        case Direction.Left:
+                            angle = 180 + 45;
+                            break;
+                        // previously was going right
+                        case Direction.Right:
+                            angle = 180 - 45;
+                            break;
+                    }
                     break;
+
+                // currently going left
                 case Direction.Left:
-                    angle = 90;
+                    switch (snakeMovePosition.GetPreviousDirection())
+                    {
+                        default:
+                            angle = -90;
+                            break;
+                        // previously was going down
+                        case Direction.Down:
+                            angle = -45;
+                            break;
+                        // previously was going up
+                        case Direction.Up:
+                            angle = 45;
+                            break;
+                    }
                     break;
+
+                // currently going to the right
                 case Direction.Right:
-                    angle = -90;
+                    switch (snakeMovePosition.GetPreviousDirection())
+                    {
+                        default:
+                            angle = -90;
+                            break;
+                        // previously was going down
+                        case Direction.Down:
+                            angle = 45;
+                            break;
+                        // previously was going up
+                        case Direction.Up:
+                            angle = -45;
+                            break;
+                    }
                     break;
 
             }
@@ -266,12 +335,14 @@ public class Monkey : MonoBehaviour
    
     private class SnakeMovePosition
     {
+        private SnakeMovePosition previousSnakeMovePosition;
         private Vector2Int currentLocation;
         private Direction direction;
 
         //constructor
-        public SnakeMovePosition(Vector2Int currentLocation, Direction direction)
+        public SnakeMovePosition(SnakeMovePosition previousSnakeMovePosition, Vector2Int currentLocation, Direction direction)
         {
+            this.previousSnakeMovePosition = previousSnakeMovePosition;
             this.currentLocation = currentLocation;
             this.direction = direction;
         }
@@ -284,6 +355,18 @@ public class Monkey : MonoBehaviour
         public Direction GetDirection()
         {
             return direction;
+        }
+
+        public Direction GetPreviousDirection()
+        {
+            if (previousSnakeMovePosition == null)
+            {
+                return Direction.Right;
+            }
+            else
+            {
+                return previousSnakeMovePosition.direction;
+            }
         }
 
     }
