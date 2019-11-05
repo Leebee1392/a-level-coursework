@@ -110,7 +110,7 @@ public class Monkey : MonoBehaviour
         // working out where the snake is
         for (int i = 0; i < snakeBodyPartList.Count; i++)
         {
-            snakeBodyPartList[i].SetGridPosition(previousLocations[i].GetCurrentLocation());
+            snakeBodyPartList[i].SetSnakeMovePosition(previousLocations[i]);
         }
     }
 
@@ -223,7 +223,7 @@ public class Monkey : MonoBehaviour
 
     private class SnakeBodyPart
     {
-        private Vector2Int currentLocation;
+        private SnakeMovePosition snakeMovePosition;
         private Transform transform;
 
         public SnakeBodyPart(int bodyIndex, Sprite body)
@@ -234,10 +234,32 @@ public class Monkey : MonoBehaviour
             transform = snakeBodyGameObject.transform;
         }
 
-        public void SetGridPosition(Vector2Int currentLocation)
+        public void SetSnakeMovePosition(SnakeMovePosition snakeMovePosition)
         {
-            this.currentLocation = currentLocation;
-            transform.position = new Vector3(currentLocation.x, currentLocation.y);
+            this.snakeMovePosition = snakeMovePosition;
+            transform.position = new Vector3(snakeMovePosition.GetCurrentLocation().x, snakeMovePosition.GetCurrentLocation().y);
+
+            // to make the monkey face the right way
+            float angle;
+            switch (snakeMovePosition.GetDirection())
+            {
+                default:
+                case Direction.Up:
+                    angle = 0;
+                    break;
+                case Direction.Down:
+                    angle = 180;
+                    break;
+                case Direction.Left:
+                    angle = 90;
+                    break;
+                case Direction.Right:
+                    angle = -90;
+                    break;
+
+            }
+
+            transform.eulerAngles = new Vector3(0, 0, angle);
         }
     }
 
@@ -258,7 +280,14 @@ public class Monkey : MonoBehaviour
         {
             return currentLocation;
         }
+
+        public Direction GetDirection()
+        {
+            return direction;
+        }
+
     }
+
 }
 
 
