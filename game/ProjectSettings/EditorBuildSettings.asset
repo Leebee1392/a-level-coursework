@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Endless Screen.unity
     guid: 0af5cabeff4134a419edfafd43e99bf3
+  - enabled: 1
+    path: Assets/Scenes/Game Over.unity
+    guid: bce26e7bffa99d643980f40fd7297483
+  - enabled: 1
+    path: Assets/Scenes/Pause.unity
+    guid: e01450a9840160048b21d3786630e08a
   m_configObjects: {}

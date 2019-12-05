@@ -28,7 +28,7 @@ public class GridManager
         // makes sure the food doesn't land on the snake
         do
         {
-            foodGridPosition = new Vector2Int(Random.Range(0, width), Random.Range(0, height));
+            foodGridPosition = new Vector2Int(Random.Range(0, width-1), Random.Range(0, height-1));
         } while (monkey.GetSnakeLocations().IndexOf(foodGridPosition) != -1);
 
         foodGameObject = new GameObject("Food", typeof(SpriteRenderer));

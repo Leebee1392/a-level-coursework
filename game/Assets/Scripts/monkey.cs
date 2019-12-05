@@ -101,6 +101,16 @@ public class Monkey : MonoBehaviour
                 previousLocations.RemoveAt(previousLocations.Count - 1);
             }
 
+           // foreach (SnakeBodyPart snakeBodyPart in snakeBodyPartList)
+            //{
+              //  Vector2Int snakeBodyPartGridPosition = SnakeBodyPart.GetGridPosition();
+                //if (currentLocation == snakeBodyPartGridPosition)
+                //{
+                    // game over
+                  //  Debug.Log("Dead");
+               // }
+           // }
+
             transform.position = new Vector3(currentLocation.x, currentLocation.y);
             transform.eulerAngles = new Vector3(0, 0, GetAngleVector(directionVector) - 90);
 
@@ -295,7 +305,7 @@ public class Monkey : MonoBehaviour
                     switch (snakeMovePosition.GetPreviousDirection())
                     {
                         default:
-                            angle = -90;
+                            angle = 90;
                             break;
                         // previously was going down
                         case Direction.Down:
@@ -329,6 +339,11 @@ public class Monkey : MonoBehaviour
             }
 
             transform.eulerAngles = new Vector3(0, 0, angle);
+        }
+
+        public Vector2Int GetGridPosition()
+        {
+            return snakeMovePosition.GetCurrentLocation();
         }
     }
 
