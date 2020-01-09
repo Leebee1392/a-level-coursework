@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Monkey : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Monkey : MonoBehaviour
         Up,
         Down,
     }
+
     private Vector2Int currentLocation;
     private Direction direction;
     public float timeSinceLastMoved;
@@ -20,6 +22,7 @@ public class Monkey : MonoBehaviour
     private List<SnakeMovePosition> previousLocations;
     private List<SnakeBodyPart> snakeBodyPartList;
     public Sprite body;
+    public int score = 0;
 
 
     public void Setup(GridManager gridManager, Sprite body)
@@ -42,6 +45,10 @@ public class Monkey : MonoBehaviour
     public void Update()
     {
         HandleInput();
+
+        if (score == 20) {
+            SceneManager.LoadScene(5);
+        }
 
         timeSinceLastMoved = timeSinceLastMoved + Time.deltaTime;
 
@@ -92,6 +99,8 @@ public class Monkey : MonoBehaviour
                 snakeBodySize++;
                 CreateSnakeBody();
                 Debug.Log("Current Snake Size" + snakeBodySize);
+                score = score + 10;
+                Debug.Log(score);
             }
 
             // check how many elements are in the list
@@ -101,15 +110,6 @@ public class Monkey : MonoBehaviour
                 previousLocations.RemoveAt(previousLocations.Count - 1);
             }
 
-           // foreach (SnakeBodyPart snakeBodyPart in snakeBodyPartList)
-            //{
-              //  Vector2Int snakeBodyPartGridPosition = SnakeBodyPart.GetGridPosition();
-                //if (currentLocation == snakeBodyPartGridPosition)
-                //{
-                    // game over
-                  //  Debug.Log("Dead");
-               // }
-           // }
 
             transform.position = new Vector3(currentLocation.x, currentLocation.y);
             transform.eulerAngles = new Vector3(0, 0, GetAngleVector(directionVector) - 90);
@@ -251,7 +251,13 @@ public class Monkey : MonoBehaviour
             GameObject snakeBodyGameObject = new GameObject("body", typeof(SpriteRenderer));
             snakeBodyGameObject.GetComponent<SpriteRenderer>().sprite = body;
             snakeBodyGameObject.GetComponent<SpriteRenderer>().sortingOrder = -bodyIndex;
+            var boxCollider = snakeBodyGameObject.AddComponent<BoxCollider>();
+            boxCollider.isTrigger = true;
             transform = snakeBodyGameObject.transform;
+
+            //might fix issue with monkey not dying when hitting itself
+            //var boxCollider = gameObject.AddComponent<BoxCollider>();
+            //boxCollider.isTrigger = true;
         }
 
         public void SetSnakeMovePosition(SnakeMovePosition snakeMovePosition)
@@ -341,10 +347,6 @@ public class Monkey : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 0, angle);
         }
 
-        public Vector2Int GetGridPosition()
-        {
-            return snakeMovePosition.GetCurrentLocation();
-        }
     }
 
    
