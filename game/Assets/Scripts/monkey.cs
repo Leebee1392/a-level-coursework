@@ -47,7 +47,8 @@ public class Monkey : MonoBehaviour
         HandleInput();
 
         if (score == 20) {
-            SceneManager.LoadScene(5);
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentSceneIndex + 1);
         }
 
         timeSinceLastMoved = timeSinceLastMoved + Time.deltaTime;

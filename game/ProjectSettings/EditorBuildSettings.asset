@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: a5ef9b58a03845a4990ccdd1127816ad
   - enabled: 1
-    path: Assets/Scenes/Story Screen.unity
-    guid: 4d11f94310cd69e4ab40eadc0b8f3de9
-  - enabled: 1
     path: Assets/Scenes/Classic Screen.unity
     guid: 596ac4255f7696847a581a9b93ab2565
   - enabled: 1
@@ -29,4 +26,37 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pause.unity
     guid: e01450a9840160048b21d3786630e08a
+  - enabled: 1
+    path: Assets/Scenes/Story Scenes/Story Scene 1.unity
+    guid: 1da189acebc24654a98e770d48e58f9f
+  - enabled: 1
+    path: Assets/Scenes/Story Levels/Story Level 1.unity
+    guid: 0dac025a1fce71d4588e6b8cc14c01d9
+  - enabled: 1
+    path: Assets/Scenes/Story Scenes/Story Scene 2.unity
+    guid: ee610050fd6628840b9777d625e9993d
+  - enabled: 1
+    path: Assets/Scenes/Story Levels/Story Level 2.unity
+    guid: 8a5f7cc5206db504cb54ae0dadac58d7
+  - enabled: 1
+    path: Assets/Scenes/Story Scenes/Story Scene 3.unity
+    guid: d255ff8420d40024e9b00fab587795fa
+  - enabled: 1
+    path: Assets/Scenes/Story Levels/Story Level 3.unity
+    guid: 1c4dac5678cd48042ae763cad5b8a4c9
+  - enabled: 1
+    path: Assets/Scenes/Story Scenes/Story Scene 4.unity
+    guid: d7b9250c58471ec4da217066137feca1
+  - enabled: 1
+    path: Assets/Scenes/Story Levels/Story Level 4.unity
+    guid: fdc0c5cdaceb2f346bfb470a28532358
+  - enabled: 1
+    path: Assets/Scenes/Story Scenes/Story Scene 5.unity
+    guid: 8d25a480c3a180f438de517486b7fdc8
+  - enabled: 1
+    path: Assets/Scenes/Story Levels/Story Level 5.unity
+    guid: a6cef132e0c52db499ce8d013e0da8b8
+  - enabled: 1
+    path: Assets/Scenes/Story Scenes/Story Scene 6.unity
+    guid: c9ced99c08561174384d26c8fa6d633b
   m_configObjects: {}
