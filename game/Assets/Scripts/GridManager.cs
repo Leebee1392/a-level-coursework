@@ -8,12 +8,15 @@ public class GridManager
     private int height;
     private Sprite foodSprite;
     private Monkey monkey;
+    private  GameObject powerGameObject;
+    private Sprite powerUp;
 
-    public GridManager(int width, int height, Sprite foodSprite)
+    public GridManager(int width, int height, Sprite foodSprite, Sprite powerUp)
     {
         this.width = width;
         this.height = height;
         this.foodSprite = foodSprite;
+        this.powerUp = powerUp;
     }
 
      public void SetUp(Monkey monkey)
@@ -21,6 +24,7 @@ public class GridManager
          this.monkey = monkey;
 
         SpawnFood();
+        SpawnPowerUp();
     }
 
     private void SpawnFood()
@@ -34,6 +38,13 @@ public class GridManager
         foodGameObject = new GameObject("Food", typeof(SpriteRenderer));
         foodGameObject.GetComponent<SpriteRenderer>().sprite = foodSprite;
         foodGameObject.transform.position = new Vector3(foodGridPosition.x, foodGridPosition.y);
+    }
+
+    private void SpawnPowerUp()
+    {
+        powerGameObject = new GameObject("Power Up", typeof(SpriteRenderer));
+        powerGameObject.GetComponent<SpriteRenderer>().sprite = powerUp;
+        powerGameObject.transform.position = new Vector3(foodGridPosition.x, foodGridPosition.y);
     }
 
    public bool SnakeMovedAndEaten(Vector2Int snakePosition)

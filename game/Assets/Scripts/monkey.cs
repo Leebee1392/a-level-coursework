@@ -22,13 +22,15 @@ public class Monkey : MonoBehaviour
     private List<SnakeMovePosition> previousLocations;
     private List<SnakeBodyPart> snakeBodyPartList;
     public Sprite body;
+    private Sprite powerUp;
     public int score = 0;
 
 
-    public void Setup(GridManager gridManager, Sprite body)
+    public void Setup(GridManager gridManager, Sprite body, Sprite powerUp)
     {
         this.gridManager = gridManager;
         this.body = body;
+        this.powerUp = powerUp;
     }
 
 
@@ -46,10 +48,18 @@ public class Monkey : MonoBehaviour
     {
         HandleInput();
 
-        if (score == 20) {
+        if (score == 60) {
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentSceneIndex + 1);
         }
+
+       // foreach (var SnakeBodyPart in snakeBodyPartList)
+      //  {
+      //      if (SnakeBodyPart == )
+       //     {
+      //          SceneManager.LoadScene(1);
+       //     }
+      //  }
 
         timeSinceLastMoved = timeSinceLastMoved + Time.deltaTime;
 
@@ -103,6 +113,12 @@ public class Monkey : MonoBehaviour
                 score = score + 10;
                 Debug.Log(score);
             }
+
+           // bool snakePowerUp = gridManager.SnakePowerUpDone(currentLocation);
+           // if (snakePowerUp)
+           // {
+                //frequencyOfMovement = 5f;
+          //  }
 
             // check how many elements are in the list
             // if its bigger than the body size, - 1 from the end of the snake
